@@ -1,5 +1,5 @@
 # Advent of Code Day 4
-# Part 1
+# Part 2
 from datetime import datetime
 
 
@@ -52,6 +52,25 @@ def get_min_most_asleep(array_of_mins, guard_id):
     return num_of_times_asleep_at_min.index(max(num_of_times_asleep_at_min))
 
 
+def get_guard_most_asleep_times_minutes(array_of_mins):
+    max_guard_id = ''
+    max_times_asleep = 0
+    max_times_asleep_index = 0
+    for guard in guard_ids:
+        num_of_times_asleep_at_min = [0 for _ in range(60)]
+        for line in array_of_mins:
+            if line['id'] == guard:
+                for i in range(len(line['mins'])):
+                    if line['mins'][i] == '#':
+                        num_of_times_asleep_at_min[i] += 1
+        current_max = max(num_of_times_asleep_at_min)
+        if current_max > max_times_asleep:
+            max_times_asleep = current_max
+            max_times_asleep_index = num_of_times_asleep_at_min.index(current_max)
+            max_guard_id = guard
+    return int(max_guard_id) * int(max_times_asleep_index)
+
+
 if __name__ == "__main__":
     #test data
     # data = [line.strip() for line in open("test_input.txt")]
@@ -68,9 +87,11 @@ if __name__ == "__main__":
     guard_ids = set()
 
     array_of_mins = get_array_of_mins()
-    guard_most_asleep = get_guard_most_asleep(array_of_mins)
-    min_most_asleep = get_min_most_asleep(array_of_mins, guard_most_asleep)
+    # guard_most_asleep = get_guard_most_asleep(array_of_mins)
+    # min_most_asleep = get_min_most_asleep(array_of_mins, guard_most_asleep)
 
-    answer = int(guard_most_asleep) * int(min_most_asleep)
-    print(answer)
+    # answer = int(guard_most_asleep) * int(min_most_asleep)
+    # print(answer)
+    print(get_guard_most_asleep_times_minutes(array_of_mins))
+
 
