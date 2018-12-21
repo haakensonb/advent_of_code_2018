@@ -14,7 +14,7 @@ class Graph():
         self.visited = []
         self.stack = []
         self.vertices = {}
-        self.starting_vertice = None
+        self.starting_vertices = None
         self.parse_input(self.input_file_name)
 
 
@@ -38,45 +38,24 @@ class Graph():
                     self.vertices[first_letter].append(second_letter)
                     # make sure that they are in alphabetical order
                     # not the most efficient way
-                    self.vertices[first_letter] = sorted(self.vertices[first_letter])
+                    self.vertices[first_letter] = sorted(self.vertices[first_letter], reverse=True)
                 
                 required_steps.add(second_letter)
         
-        self.starting_vertice = (possible_steps - required_steps).pop()
+        self.starting_vertices = list(possible_steps - required_steps)
+        # self.starting_vertices = sorted(self.starting_vertices, reverse=True)
 
 
-    def visit(self, current_vertex):
+    def solve(self, current_vertex):
         vertex_index = 'ABCDEF'.index(current_vertex)
-
-        # base case
-        if self.visited[vertex_index]:
-            return
-
         self.visited[vertex_index] = True
-
         if current_vertex in self.vertices:
-            for required_vertex in self.vertices[current_vertex]:
-                required_vertex_id = 'ABCDEF'.index(required_vertex)
-                if not self.visited[required_vertex_id]:
-                    self.visit(required_vertex)
+            for vertex in self.vertices[current_vertex]:
+                adj_vertex_id = 'ABCDEF'.index(vertex)
+                if self.visited[adj_vertex_id] == False:
+                    self.solve(vertex)
 
-        self.stack.append(current_vertex)
-
-    def are_all_visited(self):
-        for vertex in self.visited:
-            if not vertex:
-                return False
-        return True
-
-
-    def solve(self):
-        keep_going = True
-        while keep_going:
-            if self.are_all_visited():
-                keep_going = False
-            else:
-                self.visit(self.starting_vertice)
-        print(self.stack)
+        self.stack.insert(0, current_vertex)
 
 
 
@@ -84,5 +63,7 @@ if __name__ == "__main__":
     day_7 = Graph("test_input.txt")
     print(day_7.vertices)
     print(day_7.visited)
-    print(day_7.starting_vertice)
-    day_7.solve()
+    print(day_7.starting_vertices)
+    start = day_7.starting_vertices.pop()
+    day_7.solve(start)
+    print(day_7.stack)
