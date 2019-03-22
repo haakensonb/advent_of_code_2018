@@ -15,12 +15,13 @@ class Graph():
         self.stack = []
         self.vertices = {}
         self.starting_vertices = None
+        self.alphabet = string.ascii_uppercase
         self.parse_input(self.input_file_name)
 
 
     def parse_input(self, input_file_name):
-        # possible_steps = set(list(string.ascii_uppercase))
-        possible_steps = set(list("ABCDEF"))
+        possible_steps = set(list(string.ascii_uppercase))
+        # possible_steps = set(list("ABCDEF"))
         required_steps = set()
 
         self.num_of_steps = len(possible_steps)
@@ -47,11 +48,13 @@ class Graph():
 
 
     def solve(self, current_vertex):
-        vertex_index = 'ABCDEF'.index(current_vertex)
+        # vertex_index = 'ABCDEF'.index(current_vertex)
+        vertex_index = self.alphabet.index(current_vertex)
         self.visited[vertex_index] = True
         if current_vertex in self.vertices:
             for vertex in self.vertices[current_vertex]:
-                adj_vertex_id = 'ABCDEF'.index(vertex)
+                # adj_vertex_id = 'ABCDEF'.index(vertex)
+                adj_vertex_id = self.alphabet.index(vertex)
                 if self.visited[adj_vertex_id] == False:
                     self.solve(vertex)
 
@@ -59,11 +62,20 @@ class Graph():
 
 
 
+
 if __name__ == "__main__":
-    day_7 = Graph("test_input.txt")
-    print(day_7.vertices)
-    print(day_7.visited)
-    print(day_7.starting_vertices)
-    start = day_7.starting_vertices.pop()
-    day_7.solve(start)
-    print(day_7.stack)
+    # day_7 = Graph("test_input.txt")
+
+    day_7 = Graph("input.txt")
+    # print(day_7.vertices)
+    # print(day_7.visited)
+    # print(day_7.starting_vertices)
+
+    # start = day_7.starting_vertices.pop()
+    # day_7.solve(start)
+
+    for vertex in day_7.starting_vertices[::-1]:
+        day_7.solve(vertex)
+
+
+    print(''.join(day_7.stack))
